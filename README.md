@@ -29,4 +29,3 @@ If it doesn’t pop up, copy the URL printed in the terminal into your browser.
 
 ## 3. Submission
 Once you are done, submit "a1-student.ipynb" to Gradescope!
-TODO FOR JINHO, FIGURE OUT SPECIFIC SUBMISSION
