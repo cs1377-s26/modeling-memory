@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from torch.distributions import Normal
-import torch
+import numpy as np
 from abc import ABC
 from .utils import clamp
 from enum import IntEnum
@@ -12,8 +11,12 @@ class Card:
     @staticmethod
     def sample(seed=None):
         if seed is not None:
-            torch.manual_seed(seed)
-        difficulty = clamp(round(Normal(5., 2.).sample().item()), 1, 10)
+            rng = np.random.default_rng(seed)
+            sample = rng.normal(loc=5.0, scale=2.0)
+        else:
+            sample = np.random.normal(loc=5.0, scale=2.0)
+
+        difficulty = clamp(round(sample), 1, 10)
         return Card(difficulty=difficulty)
 
 class Rating(IntEnum):

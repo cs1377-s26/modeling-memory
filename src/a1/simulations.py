@@ -1,17 +1,23 @@
-from torch.distributions import Categorical
-from torch import tensor
+import numpy as np
 import pandas as pd
 import seaborn as sns
 
 from .srs import Schedule, Card
 from .mystery.mystery import MysteryLearner
 
+def _sample_initial_rating(seed=None) -> int:
+    rng = np.random.default_rng(seed) if seed is not None else None
+    if rng is None:
+        return int(np.random.randint(1, 5))
+    return int(rng.integers(1, 5))
+
 
 def simulate(Schedule: Schedule, seed=None, **kwargs):
     card = Card.sample(seed=seed)
     schedule = Schedule(**kwargs)
     learner = MysteryLearner(card, seed=seed)
-    initial_rating = Categorical(tensor([0.25, 0.25, 0.25, 0.25])).sample().item() + 1
+    # initial_rating = Categorical(tensor([0.25, 0.25, 0.25, 0.25])).sample().item() + 1
+    initial_rating = _sample_initial_rating(seed=seed)
     learner.initialize(initial_rating)
     schedule.initialize(initial_rating)
 
@@ -40,7 +46,8 @@ def cheating_simulate(Schedule: Schedule, seed=None):
     card = Card.sample(seed=seed)
     learner = MysteryLearner(card, seed=seed)
     schedule = Schedule(MysteryLearner(card, seed=seed))
-    initial_rating = Categorical(tensor([0.25, 0.25, 0.25, 0.25])).sample().item() + 1
+    #initial_rating = Categorical(tensor([0.25, 0.25, 0.25, 0.25])).sample().item() + 1
+    initial_rating = _sample_initial_rating(seed=seed)
     learner.initialize(initial_rating)
     schedule.initialize(initial_rating)
 
