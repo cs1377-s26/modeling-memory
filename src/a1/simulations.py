@@ -92,7 +92,7 @@ def eval_metrics(data, schedule, t_eval=100):
     mean_recall = data["recall_prob"].mean()
     num_reviews = len(data[data["review"]]) / data["trace"].max()
     exam_recall = data.loc[data["time"] == t_eval, "recall_prob"].mean()
-    agg_score = max(min((mean_recall - .95) * (14 - num_reviews) * 20, 1.), 0.) * 40
+    agg_score = min(max(mean_recall - 0.95, 0) * max(14 - num_reviews, 0) * 20, 1.0) * 40
 
     return pd.DataFrame([{
         "schedule": schedule,
